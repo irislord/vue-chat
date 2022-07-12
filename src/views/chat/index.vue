@@ -12,7 +12,9 @@
         @dragend="(e) => e.preventDefault()"
       ></section>
       <section class="left-section"></section>
-      <section class="right-section"></section>
+      <section class="right-section">
+        <chat-box></chat-box>
+      </section>
     </div>
   </transition>
 </template>
