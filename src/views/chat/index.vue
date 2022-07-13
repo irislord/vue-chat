@@ -3,27 +3,31 @@
     <!-- 绑定style中的top和left来实现拖拽 -->
     <div class="chatBox" v-show="isShow" :style="position">
       <!-- 禁用h5原生的拖拽事件，否则会与mouseup事件冲突，双击后导致拖拽失效 -->
-      <section
-        class="top-section"
-        @mousedown="mousedown"
-        @mouseup="mouseup"
-        @mousemove="mousemove"
-        @dragstart="(e) => e.preventDefault()"
-        @dragend="(e) => e.preventDefault()"
-      ></section>
       <section class="left-section"></section>
       <section class="right-section">
-        <chat-box></chat-box>
+        <div
+          class="top-bar"
+          @mousedown="mousedown"
+          @mouseup="mouseup"
+          @dragstart="(e) => e.preventDefault()"
+          @dragend="(e) => e.preventDefault()"
+        ></div>
+        <div class="chat-container">
+          <chat-list></chat-list>
+          <chat-content></chat-content>
+        </div>
       </section>
     </div>
   </transition>
 </template>
 
 <script>
-import chatBox from '@/views/chat/chatBox.vue'
+import chatList from '@/views/chat/components/ChatList.vue'
+import chatContent from '@/views/chat/components/ChatContent.vue'
 export default {
   components: {
-    chatBox: chatBox
+    chatList: chatList,
+    chatContent: chatContent
   },
   name: 'VueChatIndex',
   props: {},
@@ -51,12 +55,22 @@ export default {
       this.isShow = !this.isShow
     },
     mousedown (event) {
+      const _this = this
       this.leftOffset = event.offsetX
       this.topOffset = event.offsetY
       this.isMove = true
+      document.onmousemove = function (event) {
+        if (!_this.isMove) {
+          return
+        }
+        _this.x = event.clientX - _this.leftOffset
+        _this.y = event.clientY - _this.topOffset
+      }
     },
     mouseup () {
       this.isMove = false
+      document.onmousemove = null
+      console.log(this.isMove)
     },
     mousemove (event) {
       if (!this.isMove) {
@@ -73,23 +87,22 @@ export default {
 .chatBox{
     width: 600px;
     height: 500px;
-    position: absolute;
-    .top-section{
-        width: 100%;
-        height: 10%;
-        background-color: #f77;
-    }
+    position: fixed;
     .left-section{
         width: 10%;
-        height: 90%;
+        height: 100%;
         background-color: #777;
         float: left;
     }
     .right-section{
-        width: 90%;
-        height: 90%;
+        width: 100%;
+        height: 100%;
         background-color: #ff7;
-        float: right;
+        .top-bar{
+          width: 100%;
+          height: 10%;
+          background-color: #f77;
+        }
     }
 }
 .v-enter,.v-leave-to{
