@@ -59,6 +59,7 @@ export default {
       this.leftOffset = event.offsetX
       this.topOffset = event.offsetY
       this.isMove = true
+      //将mousemove事件绑定到document上而不是dom上，可以避免出现拖拽卡顿
       document.onmousemove = function (event) {
         if (!_this.isMove) {
           return
