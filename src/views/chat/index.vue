@@ -55,21 +55,21 @@ export default {
       this.isShow = !this.isShow
     },
     mousedown (event) {
-      const _this = this
       this.leftOffset = event.offsetX
       this.topOffset = event.offsetY
       this.isMove = true
       //将mousemove事件绑定到document上而不是dom上，可以避免出现拖拽卡顿
-      document.onmousemove = function (event) {
-        if (!_this.isMove) {
+      document.onmousemove =  (event)=> {
+        if (!this.isMove) {
           return
         }
-        _this.x = event.clientX - _this.leftOffset
-        _this.y = event.clientY - _this.topOffset
+        this.x = event.clientX - this.leftOffset
+        this.y = event.clientY - this.topOffset
       }
     },
     mouseup () {
       this.isMove = false
+      //移除mousemove事件
       document.onmousemove = null
     },
     mousemove (event) {
