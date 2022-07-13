@@ -70,7 +70,6 @@ export default {
     mouseup () {
       this.isMove = false
       document.onmousemove = null
-      console.log(this.isMove)
     },
     mousemove (event) {
       if (!this.isMove) {
